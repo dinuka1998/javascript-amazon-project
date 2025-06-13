@@ -25,7 +25,7 @@ products.forEach((product) => {
       </div>
 
       <div class="product-quantity-container">
-        <select>
+        <select class="js-quantity-selector-${product.id}">
           <option selected value="1">1</option>
           <option value="2">2</option>
           <option value="3">3</option>
@@ -41,7 +41,7 @@ products.forEach((product) => {
 
       <div class="product-spacer"></div>
 
-      <div class="added-to-cart">
+      <div class="added-to-cart js-added-to-cart-${product.id}">
         <img src="images/icons/checkmark.png">
         Added
       </div>
@@ -56,10 +56,36 @@ products.forEach((product) => {
 
 document.querySelector('.js-products-grid').innerHTML = productHTML;
 
+const timeoutIds = {};
+
 document.querySelectorAll('.js-add-to-cart').forEach((buttonElement) => {
   buttonElement.addEventListener('click',() => {
     const productId = buttonElement.dataset.productId;
+    const quantitySelectValue = document.querySelector(`.js-quantity-selector-${productId}`).value;
     let matchingItem;
+    const addedMessage = document.querySelector(`.js-added-to-cart-${productId}`);
+
+    addedMessage.classList.add('added-to-cart-opacity');
+
+    const previousTimeoutId = timeoutIds[productId];
+    if (previousTimeoutId) {
+      clearTimeout(previousTimeoutId);
+    }
+
+
+    const timeoutId = setTimeout(() => {
+      addedMessage.classList.remove('added-to-cart-opacity');
+    }, 2000);
+
+    timeoutIds[productId] = timeoutId;
+
+
+
+
+
+
+    
+    
 
     cart.forEach((item) => {
       if (productId === item.productId) {
@@ -68,14 +94,14 @@ document.querySelectorAll('.js-add-to-cart').forEach((buttonElement) => {
     });
 
     if (matchingItem) {
-      matchingItem.quantity += 1;
+      matchingItem.quantity += Number(quantitySelectValue);
     } else {
       cart.push({
         productId: productId,
-        quantity: 1
+        quantity: Number(quantitySelectValue)
       });
     }
-
+     
     let cartQuantity = 0;
 
     cart.forEach((item) => {
@@ -83,5 +109,8 @@ document.querySelectorAll('.js-add-to-cart').forEach((buttonElement) => {
     })
 
     document.querySelector('.js-cart-quantity').innerHTML = cartQuantity;
+
+
+
   })
 })
