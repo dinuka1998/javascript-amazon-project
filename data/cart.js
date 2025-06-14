@@ -41,4 +41,4 @@ export function addToCart(productId) {
       quantity: Number(quantitySelectValue)
     });
   }
-}
+};
