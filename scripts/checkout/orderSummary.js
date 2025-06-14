@@ -18,6 +18,17 @@ export function renderOrderSummary() {
 
   let cartSummaryHTML = '';
   updateCartQuantity();
+
+  if (cart.length == 0){
+      cartSummaryHTML = `
+      <div data-testid="empty-cart-message">
+        Your cart is empty.
+      </div>
+      <a class="button-primary view-products-link" href="../amazon.html" data-testid="view-products-link">
+        View products
+      </a>
+      `;
+    }
   cart.forEach((cartItem) => {
 
     const productId = cartItem.productId;
@@ -106,6 +117,7 @@ export function renderOrderSummary() {
     return html;
   }
 
+ 
   document.querySelector('.js-order-summary').innerHTML = cartSummaryHTML;
 
   document.querySelectorAll('.js-delete-quantity-link').forEach((link) => {
@@ -117,6 +129,7 @@ export function renderOrderSummary() {
       
       container.remove();
       updateCartQuantity();
+      renderOrderSummary();
     });
   });
 
@@ -182,5 +195,6 @@ export function renderOrderSummary() {
     })
   });
 
+  renderPaymetSummary();
 }
 

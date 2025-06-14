@@ -233,4 +233,12 @@
   display: none;
 }
 
+.view-products-link {
+  display: inline-block;
+  padding: 8px 15px;
+  text-decoration: none;
+  margin-top: 10px;
+}
+
+
 
