@@ -1,1 +1,38 @@
 export const cart = [];
+
+const timeoutIds = {};
+export function addToCart(productId) {
+
+  const quantitySelectValue = document.querySelector(`.js-quantity-selector-${productId}`).value;
+  let matchingItem;
+  const addedMessage = document.querySelector(`.js-added-to-cart-${productId}`);
+
+  addedMessage.classList.add('added-to-cart-opacity');
+
+  const previousTimeoutId = timeoutIds[productId];
+  if (previousTimeoutId) {
+    clearTimeout(previousTimeoutId);
+  }
+
+
+  const timeoutId = setTimeout(() => {
+    addedMessage.classList.remove('added-to-cart-opacity');
+  }, 2000);
+
+  timeoutIds[productId] = timeoutId;
+
+  cart.forEach((cartItem) => {
+    if (productId === cartItem.productId) {
+      matchingItem = cartItem;
+    }
+  });
+
+  if (matchingItem) {
+    matchingItem.quantity += Number(quantitySelectValue);
+  } else {
+    cart.push({
+      productId: productId,
+      quantity: Number(quantitySelectValue)
+    });
+  }
+}
